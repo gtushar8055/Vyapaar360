@@ -8,16 +8,51 @@ export const getDashboardData = async (req, res) => {
 
     /* ===================== DATE RANGES ===================== */
 
-    const todayStart = new Date();
-    todayStart.setHours(0, 0, 0, 0);
+    // const todayStart = new Date();
+    // todayStart.setHours(0, 0, 0, 0);
 
-    const todayEnd = new Date();
-    todayEnd.setHours(23, 59, 59, 999);
+    // const todayEnd = new Date();
+    // todayEnd.setHours(23, 59, 59, 999);
 
+    // const monthStart = new Date(
+    //   new Date().getUTCFullYear(),
+    //   new Date().getUTCMonth(),
+    //   1,
+    // );
+
+    /* ===================== DATE RANGES (IST SAFE) ===================== */
+
+    const now = new Date();
+
+    // Start of today in IST → converted to UTC
+    const todayStart = new Date(
+      Date.UTC(
+        now.getUTCFullYear(),
+        now.getUTCMonth(),
+        now.getUTCDate(),
+        -5,
+        -30,
+        0,
+        0,
+      ),
+    );
+
+    // End of today in IST → converted to UTC
+    const todayEnd = new Date(
+      Date.UTC(
+        now.getUTCFullYear(),
+        now.getUTCMonth(),
+        now.getUTCDate(),
+        18,
+        29,
+        59,
+        999,
+      ),
+    );
+
+    // Month start (safe as-is)
     const monthStart = new Date(
-      new Date().getUTCFullYear(),
-      new Date().getUTCMonth(),
-      1,
+      Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1, 0, 0, 0, 0),
     );
 
     /* ===================== KPI CALCULATIONS ===================== */
@@ -92,7 +127,7 @@ export const getDashboardData = async (req, res) => {
       { $group: { _id: null, total: { $sum: "$totalGst" } } },
     ]);
 
-    // LOW STOCK COUNT 
+    // LOW STOCK COUNT
     const lowStockAgg = await Inventory.aggregate([
       {
         $match: {
