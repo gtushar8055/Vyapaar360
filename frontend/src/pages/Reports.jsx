@@ -65,7 +65,7 @@ export default function Reports() {
         </div>
 
         <div className="mt-10 text-center text-sm text-black italic">
-          <marquee behavior="normal" direction="right">
+          <marquee behavior="normal" direction="left">
             More advanced reports will be available in future versions of
             Vyapaar360.
           </marquee>

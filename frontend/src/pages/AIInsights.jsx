@@ -151,7 +151,7 @@ export default function AIInsights() {
       </div>
 
       <div className="mt-10 text-center text-sm text-black italic">
-        <marquee behavior="fast" direction="right">
+        <marquee behavior="fast" direction="left">
           More Insights will be available in future versions of Vyapaar360.
         </marquee>
       </div>
