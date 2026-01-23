@@ -1,18 +1,22 @@
 import Sale from "../models/Sale.js";
 import Purchase from "../models/Purchase.js";
 import Inventory from "../models/Inventory.js";
+import { getISTEndOfDayUTC } from "../utils/istDate.js";
+
+
 
 /**
  * @desc    Smart Insights (Rule-based, Instant)
  * @route   GET /api/insights
- */
+*/
 export const getSmartInsights = async (req, res) => {
   try {
     const shopId = req.shop._id;
-
+    
     /* ================= DATE RANGE ================= */
-    const last30 = new Date();
-    last30.setDate(last30.getDate() - 30);
+    // const last30 = new Date();
+    // last30.setDate(last30.getDate() - 30);
+    const last30 = new Date(getISTEndOfDayUTC().getTime() - 30 * 24 * 60 * 60 * 1000);
 
     /* ================= SALES (LAST 30 DAYS) ================= */
     const salesAgg = await Sale.aggregate([

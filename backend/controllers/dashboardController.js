@@ -2,6 +2,14 @@ import Sale from "../models/Sale.js";
 import Purchase from "../models/Purchase.js";
 import Inventory from "../models/Inventory.js";
 
+import {
+  getISTStartOfDayUTC,
+  getISTEndOfDayUTC,
+  getISTMonthStartUTC,
+} from "../utils/istDate.js";
+
+
+
 export const getDashboardData = async (req, res) => {
   try {
     const shopId = req.shop._id;
@@ -20,40 +28,9 @@ export const getDashboardData = async (req, res) => {
     //   1,
     // );
 
-    /* ===================== DATE RANGES (IST SAFE) ===================== */
-
-    const now = new Date();
-
-    // Start of today in IST → converted to UTC
-    const todayStart = new Date(
-      Date.UTC(
-        now.getUTCFullYear(),
-        now.getUTCMonth(),
-        now.getUTCDate(),
-        -5,
-        -30,
-        0,
-        0,
-      ),
-    );
-
-    // End of today in IST → converted to UTC
-    const todayEnd = new Date(
-      Date.UTC(
-        now.getUTCFullYear(),
-        now.getUTCMonth(),
-        now.getUTCDate(),
-        18,
-        29,
-        59,
-        999,
-      ),
-    );
-
-    // Month start (safe as-is)
-    const monthStart = new Date(
-      Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1, 0, 0, 0, 0),
-    );
+    const todayStart = getISTStartOfDayUTC();
+    const todayEnd = getISTEndOfDayUTC();
+    const monthStart = getISTMonthStartUTC();
 
     /* ===================== KPI CALCULATIONS ===================== */
     const todaySalesAgg = await Sale.aggregate([
