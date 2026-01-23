@@ -13,6 +13,8 @@ import Sales from "./pages/Sales";
 import Customers from "./pages/Customers";
 import AIInsights from "./pages/AIInsights";
 import Reports from "./pages/Reports";
+import Landing from "./pages/Landing";
+
 
 
 // inside protected routes
@@ -22,6 +24,7 @@ export default function App() {
     <>
       <Toaster position="top-right" />
       <Routes>
+        <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
 

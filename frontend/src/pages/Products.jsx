@@ -109,7 +109,7 @@ export default function Products() {
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-[#1A304B]">Products</h1>
+            <h1 className="text-2xl font-bold text-[#1A304B]">Inventory</h1>
             <p className="text-gray-500">Manage stock, pricing and GST</p>
           </div>
           <img

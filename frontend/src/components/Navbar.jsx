@@ -24,7 +24,7 @@ export default function Navbar() {
         {/* Desktop links */}
         <div className="hidden md:flex gap-6 text-[#1A304B] font-medium">
           <Link to="/dashboard">Dashboard</Link>
-          <Link to="/products">Products</Link>
+          <Link to="/products">Inventory</Link>
           <Link to="/purchase">Purchase</Link>
           <Link to="/sales">Sales</Link>
           <Link to="/customers">Customers</Link>
@@ -84,7 +84,7 @@ export default function Navbar() {
       onClick={() => setMenuOpen(false)}
       className="block px-4 py-3 border-b text-[#1A304B]"
     >
-      Products
+      Inventory
     </Link>
 
     <Link
