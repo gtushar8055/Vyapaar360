@@ -94,6 +94,9 @@ This project focuses not only on features, but also on **real-world production d
 <img width="1899" height="914" alt="Screenshot 2026-01-24 150309" src="https://github.com/user-attachments/assets/e51554fe-c44f-4e05-8403-57e22bd140ef" />
 <img width="1901" height="920" alt="Screenshot 2026-01-24 150327" src="https://github.com/user-attachments/assets/68a01b8c-bf29-4be3-822b-af88f655b27d" />
 
+### 🧾 Invoice Generation
+<img width="1898" height="919" alt="Screenshot 2026-01-24 151713" src="https://github.com/user-attachments/assets/9cf5c6ff-5f62-4c59-a8ab-bbf164970b53" />
+
 
 
 ### 📦 Purchase Management
@@ -105,6 +108,7 @@ This project focuses not only on features, but also on **real-world production d
 ### 📦 Inventory & Stock Alerts
 <!-- ADD INVENTORY PAGE SCREENSHOT HERE -->
 <img width="1900" height="918" alt="Screenshot 2026-01-24 150441" src="https://github.com/user-attachments/assets/87159a9b-8791-4aa0-86b1-8b16f1d8af67" />
+<img width="1901" height="923" alt="Screenshot 2026-01-24 151824" src="https://github.com/user-attachments/assets/fc887806-255e-4674-8102-9b284bdbe44a" />
 
 
 
