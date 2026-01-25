@@ -6,6 +6,11 @@ This project focuses not only on features, but also on **real-world production d
 
 <img width="922" height="271" alt="logo" src="https://github.com/user-attachments/assets/646a9208-4c99-4534-89c9-44a836ce86c2" />
 
+# 🧾 Vyapaar360 — Overview 
+
+<img width="2752" height="1536" alt="V360" src="https://github.com/user-attachments/assets/3b8293dd-83d1-4479-9149-82d654e34670" />
+
+
 ## ✨ Key Features
 
 ### 🏪 For Shop Owners (Core Features)
