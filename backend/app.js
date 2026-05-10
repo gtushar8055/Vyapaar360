@@ -10,16 +10,7 @@ import dashboardRoutes from "./routes/dashboardRoute.js";
 import customerRoutes from "./routes/customerRoutes.js";
 import insightsRoutes from "./routes/insightsRoutes.js";
 import reportsRoutes from "./routes/reportsRoutes.js";
-
-
-
-
-
-
-
-
-
-
+import chatRoutes from "./routes/chatRoutes.js";
 
 const app = express();
 
@@ -36,14 +27,7 @@ app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/customers", customerRoutes);
 app.use("/api/insights", insightsRoutes);
 app.use("/api/reports", reportsRoutes);
-
-
-
-
-
-
-
-
+app.use("/api/chat", chatRoutes);
 
 app.get("/", (req, res) => {
   res.send("Vyapaar360 Backend is running");

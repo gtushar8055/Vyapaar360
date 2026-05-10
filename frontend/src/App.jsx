@@ -14,8 +14,7 @@ import Customers from "./pages/Customers";
 import AIInsights from "./pages/AIInsights";
 import Reports from "./pages/Reports";
 import Landing from "./pages/Landing";
-
-
+import VyapaarChat from "./pages/VyapaarChat";
 
 // inside protected routes
 
@@ -36,8 +35,6 @@ export default function App() {
             </ProtectedRoute>
           }
         >
-
-
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/products" element={<Products />} />
           <Route path="/purchase" element={<Purchase />} />
@@ -45,6 +42,7 @@ export default function App() {
           <Route path="/customers" element={<Customers />} />
           <Route path="/ai-insights" element={<AIInsights />} />
           <Route path="/reports" element={<Reports />} />
+          <Route path="/vyapaarchat" element={<VyapaarChat />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/login" />} />

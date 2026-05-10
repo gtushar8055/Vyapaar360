@@ -18,7 +18,7 @@ export default function Navbar() {
       <nav className="bg-white shadow-md px-4 py-3 flex justify-between items-center">
         {/* Logo */}
         <Link to="/dashboard" className="flex items-center gap-2">
-        <img src="/logo.png" alt="Vyapaar360" className="h-8" />
+          <img src="/logo.png" alt="Vyapaar360" className="h-8" />
         </Link>
 
         {/* Desktop links */}
@@ -30,8 +30,7 @@ export default function Navbar() {
           <Link to="/customers">Customers</Link>
           <Link to="/ai-insights">Smart Insights</Link>
           <Link to="/reports">Reports</Link>
-
-          
+          <Link to="/vyapaarchat">VyapaarChat</Link>
         </div>
 
         {/* Mobile menu */}
@@ -70,72 +69,79 @@ export default function Navbar() {
 
       {/* Mobile menu panel */}
       {menuOpen && (
-  <div className="md:hidden bg-white shadow-md border-t">
-    <Link
-      to="/dashboard"
-      onClick={() => setMenuOpen(false)}
-      className="block px-4 py-3 border-b text-[#1A304B]"
-    >
-      Dashboard
-    </Link>
+        <div className="md:hidden bg-white shadow-md border-t">
+          <Link
+            to="/dashboard"
+            onClick={() => setMenuOpen(false)}
+            className="block px-4 py-3 border-b text-[#1A304B]"
+          >
+            Dashboard
+          </Link>
 
-    <Link
-      to="/products"
-      onClick={() => setMenuOpen(false)}
-      className="block px-4 py-3 border-b text-[#1A304B]"
-    >
-      Inventory
-    </Link>
+          <Link
+            to="/products"
+            onClick={() => setMenuOpen(false)}
+            className="block px-4 py-3 border-b text-[#1A304B]"
+          >
+            Inventory
+          </Link>
 
-    <Link
-      to="/purchase"
-      onClick={() => setMenuOpen(false)}
-      className="block px-4 py-3 border-b text-[#1A304B]"
-    >
-      Purchase
-    </Link>
+          <Link
+            to="/purchase"
+            onClick={() => setMenuOpen(false)}
+            className="block px-4 py-3 border-b text-[#1A304B]"
+          >
+            Purchase
+          </Link>
 
-    <Link
-      to="/sales"
-      onClick={() => setMenuOpen(false)}
-      className="block px-4 py-3 border-b text-[#1A304B]"
-    >
-      Sales
-    </Link>
+          <Link
+            to="/sales"
+            onClick={() => setMenuOpen(false)}
+            className="block px-4 py-3 border-b text-[#1A304B]"
+          >
+            Sales
+          </Link>
 
-    <Link
-      to="/customers"
-      onClick={() => setMenuOpen(false)}
-      className="block px-4 py-3 border-b text-[#1A304B]"
-    >
-      Customers
-    </Link>
+          <Link
+            to="/customers"
+            onClick={() => setMenuOpen(false)}
+            className="block px-4 py-3 border-b text-[#1A304B]"
+          >
+            Customers
+          </Link>
 
-    <Link
-      to="/ai-insights"
-      onClick={() => setMenuOpen(false)}
-      className="block px-4 py-3 border-b text-[#1A304B]"
-    >
-      Smart Insights
-    </Link>
+          <Link
+            to="/ai-insights"
+            onClick={() => setMenuOpen(false)}
+            className="block px-4 py-3 border-b text-[#1A304B]"
+          >
+            Smart Insights
+          </Link>
 
-    <Link
-      to="/reports"
-      onClick={() => setMenuOpen(false)}
-      className="block px-4 py-3 border-b text-[#1A304B]"
-    >
-      Reports
-    </Link>
+          <Link
+            to="/reports"
+            onClick={() => setMenuOpen(false)}
+            className="block px-4 py-3 border-b text-[#1A304B]"
+          >
+            Reports
+          </Link>
 
-    <button
-      onClick={handleLogout}
-      className="block w-full text-left px-4 py-3 text-red-600 font-medium"
-    >
-      Logout
-    </button>
-  </div>
-)}
+          <Link
+            to="/vyapaarchat"
+            onClick={() => setMenuOpen(false)}
+            className="block px-4 py-3 border-b text-[#1A304B]"
+          >
+            VyapaarChat
+          </Link>
 
+          <button
+            onClick={handleLogout}
+            className="block w-full text-left px-4 py-3 text-red-600 font-medium"
+          >
+            Logout
+          </button>
+        </div>
+      )}
 
       {/* Page content */}
       <main className="p-4 bg-gray-50 min-h-screen">
