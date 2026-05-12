@@ -55,6 +55,11 @@ This project focuses not only on features, but also on **real-world production d
 - Professional UI for real shop owners
 - Direct login/register access
 
+#### 🤖 VyapaarChat (AI Assistant)
+- Context-aware assistant for Vyapaar360 features & workflows
+- Helps answer questions about billing, inventory, GST, reports
+- Built with Gemini API and protected backend access
+
 ## 🚀 Technology Stack
 
 ### Frontend
@@ -79,23 +84,22 @@ This project focuses not only on features, but also on **real-world production d
 ## 📱 Application Screenshots
 
 ### 🏠 Landing Page
-<!-- ADD LANDING PAGE SCREENSHOT HERE -->
+
 <img width="1901" height="917" alt="Screenshot 2026-01-24 145503" src="https://github.com/user-attachments/assets/39e7c6d1-2449-4394-833f-f5b59afbe537" />
 
 ### 🔐 Login / Register
-<!-- ADD LOGIN PAGE SCREENSHOT HERE -->
 
 <img width="1919" height="917" alt="Screenshot 2026-01-24 145657" src="https://github.com/user-attachments/assets/6abb1c5b-b14c-49b4-9d8b-b949331e2370" />
 <img width="1919" height="919" alt="Screenshot 2026-01-24 145707" src="https://github.com/user-attachments/assets/b9cbfa9f-d6af-4fda-ab9b-bf4e2d13b69d" />
 
 ### 📊 Dashboard Overview
-<!-- ADD DASHBOARD SCREENSHOT HERE -->
+
 <img width="1898" height="832" alt="Screenshot 2026-01-24 145940" src="https://github.com/user-attachments/assets/62366d5a-9d2e-4634-aafc-4ffc2d90f1ca" />
 <img width="991" height="549" alt="Screenshot 2026-01-23 182635" src="https://github.com/user-attachments/assets/80f5a52d-b79f-4f6f-ba59-fde7b6fecd52" />
 
 
 ### 🧾 Billing / Sales Page
-<!-- ADD SALES PAGE SCREENSHOT HERE -->
+
 <img width="1899" height="914" alt="Screenshot 2026-01-24 150309" src="https://github.com/user-attachments/assets/e51554fe-c44f-4e05-8403-57e22bd140ef" />
 <img width="1901" height="920" alt="Screenshot 2026-01-24 150327" src="https://github.com/user-attachments/assets/68a01b8c-bf29-4be3-822b-af88f655b27d" />
 
@@ -105,27 +109,32 @@ This project focuses not only on features, but also on **real-world production d
 
 
 ### 📦 Purchase Management
-<!-- ADD PURCHASE PAGE SCREENSHOT HERE -->
+
 <img width="1379" height="868" alt="Screenshot 2026-01-23 180843" src="https://github.com/user-attachments/assets/8931ff37-f096-4e42-a894-fc200e03de9e" />
 <img width="1899" height="917" alt="Screenshot 2026-01-24 150354" src="https://github.com/user-attachments/assets/d68f3bc8-f14e-447e-886c-ec9964078e0a" />
 
 
 ### 📦 Inventory & Stock Alerts
-<!-- ADD INVENTORY PAGE SCREENSHOT HERE -->
+
 <img width="1900" height="918" alt="Screenshot 2026-01-24 150441" src="https://github.com/user-attachments/assets/87159a9b-8791-4aa0-86b1-8b16f1d8af67" />
 <img width="1901" height="923" alt="Screenshot 2026-01-24 151824" src="https://github.com/user-attachments/assets/fc887806-255e-4674-8102-9b284bdbe44a" />
 
 
 
 ### 🧠 Smart Insights Page
-<!-- ADD INSIGHTS PAGE SCREENSHOT HERE -->
+
 <img width="1899" height="919" alt="Screenshot 2026-01-24 150426" src="https://github.com/user-attachments/assets/ca6b6889-76ae-4664-93c1-4a5fb9f15242" />
 
 
 
 ### 📄 Reports Download (PDF)
-<!-- ADD REPORTS PAGE SCREENSHOT HERE -->
+
 <img width="1900" height="915" alt="Screenshot 2026-01-24 150154" src="https://github.com/user-attachments/assets/38908a5b-04d7-4f13-a910-aa758850cd5c" />
+
+### 📄 VyapaarChat
+
+<img width="1897" height="916" alt="image" src="https://github.com/user-attachments/assets/8b94f41a-a339-4c97-be8e-cfd4e8e3049b" />
+
 
 
 ## 🌐 Live Demo
