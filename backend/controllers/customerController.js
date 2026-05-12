@@ -1,6 +1,8 @@
 import Customer from "../models/Customer.js";
 import Sale from "../models/Sale.js";
 
+const escapeRegex = (value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
 /* ================= GET ALL CUSTOMERS (SHOP SAFE) ================= */
 export const getCustomers = async (req, res) => {
   try {
@@ -42,6 +44,33 @@ export const getCustomers = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Failed to fetch customers" });
+  }
+};
+
+/* ================= CUSTOMER SEARCH (SHOP SAFE) ================= */
+export const searchCustomers = async (req, res) => {
+  try {
+    const query = (req.query.q || "").trim();
+
+    if (query.length < 2) {
+      return res.json([]);
+    }
+
+    const safe = escapeRegex(query);
+    const regex = new RegExp(safe, "i");
+
+    const results = await Customer.find({
+      shop: req.shop._id,
+      $or: [{ name: regex }, { phone: regex }],
+    })
+      .sort({ lastPurchaseAt: -1 })
+      .limit(8)
+      .select("name phone address gstOrAadhaar");
+
+    res.json(results);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Failed to search customers" });
   }
 };
 
@@ -94,8 +123,7 @@ export const receivePayment = async (req, res) => {
 
       sale.amountReceived += pay;
       sale.pendingAmount -= pay;
-      sale.paymentStatus =
-        sale.pendingAmount === 0 ? "PAID" : "PARTIAL";
+      sale.paymentStatus = sale.pendingAmount === 0 ? "PAID" : "PARTIAL";
 
       await sale.save();
       amount -= pay;

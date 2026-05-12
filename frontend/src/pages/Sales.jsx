@@ -16,14 +16,49 @@ export default function Sales() {
   const [amountReceived, setAmountReceived] = useState("");
   const [saving, setSaving] = useState(false);
 
+  const [customerSuggestions, setCustomerSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [searchingCustomers, setSearchingCustomers] = useState(false);
+
   /* ===== SALES HISTORY ===== */
   const [showHistory, setShowHistory] = useState(false);
   const [salesHistory, setSalesHistory] = useState([]);
 
   /* ================= LOAD PRODUCTS ================= */
+  const fetchProducts = async () => {
+    const res = await axios.get("/products");
+    setProducts(res.data);
+  };
+
   useEffect(() => {
-    axios.get("/products").then((res) => setProducts(res.data));
+    fetchProducts();
   }, []);
+
+  useEffect(() => {
+    const query = customer.name.trim();
+
+    if (query.length < 2) {
+      setCustomerSuggestions([]);
+      setShowSuggestions(false);
+      return;
+    }
+
+    const handle = setTimeout(async () => {
+      try {
+        setSearchingCustomers(true);
+        const res = await axios.get(`/customers/search?q=${query}`);
+        setCustomerSuggestions(res.data || []);
+        setShowSuggestions(true);
+      } catch {
+        setCustomerSuggestions([]);
+        setShowSuggestions(false);
+      } finally {
+        setSearchingCustomers(false);
+      }
+    }, 300);
+
+    return () => clearTimeout(handle);
+  }, [customer.name]);
 
   /* ================= ITEM HELPERS ================= */
   const addItem = () => setItems([...items, { productId: "", quantity: 1 }]);
@@ -34,6 +69,19 @@ export default function Sales() {
     copy[index][key] = value;
     setItems(copy);
   };
+
+  const selectCustomer = (suggestion) => {
+    setCustomer({
+      name: suggestion.name || "",
+      phone: suggestion.phone || "",
+      address: suggestion.address || "",
+      gstOrAadhaar: suggestion.gstOrAadhaar || "",
+    });
+    setShowSuggestions(false);
+  };
+
+  const getProductById = (productId) =>
+    products.find((p) => p._id === productId);
 
   /* ================= CALCULATIONS ================= */
   const { subtotal, totalGst, grandTotal, pending } = useMemo(() => {
@@ -92,6 +140,9 @@ export default function Sales() {
       setItems([{ productId: "", quantity: 1 }]);
       setAmountReceived("");
       setCustomer({ name: "", phone: "", address: "", gstOrAadhaar: "" });
+      setCustomerSuggestions([]);
+      setShowSuggestions(false);
+      await fetchProducts();
     } catch (err) {
       Swal.fire(
         "Error",
@@ -166,13 +217,48 @@ export default function Sales() {
       {/* CUSTOMER */}
       <div className="bg-white rounded-xl border-2 border-[#1A304B] shadow p-5 mb-6">
         <h2 className="font-semibold mb-3">Customer Details</h2>
-        <div className="grid md:grid-cols-4 gap-4">
-          <input
-            placeholder="Customer Name *"
-            className="border p-2 rounded"
-            value={customer.name}
-            onChange={(e) => setCustomer({ ...customer, name: e.target.value })}
-          />
+        <div className="grid md:grid-cols-4 gap-4 relative">
+          <div className="relative">
+            <input
+              placeholder="Customer Name *"
+              className="border p-2 rounded w-full"
+              value={customer.name}
+              onChange={(e) =>
+                setCustomer({ ...customer, name: e.target.value })
+              }
+              onFocus={() =>
+                customerSuggestions.length > 0 && setShowSuggestions(true)
+              }
+              onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+            />
+
+            {showSuggestions && (
+              <div className="absolute z-10 mt-1 w-full bg-white border rounded shadow max-h-56 overflow-auto">
+                {searchingCustomers && (
+                  <div className="p-2 text-sm text-gray-500">Searching...</div>
+                )}
+
+                {!searchingCustomers && customerSuggestions.length === 0 && (
+                  <div className="p-2 text-sm text-gray-500">No matches</div>
+                )}
+
+                {!searchingCustomers &&
+                  customerSuggestions.map((c) => (
+                    <button
+                      type="button"
+                      key={`${c.phone}-${c.name}`}
+                      onClick={() => selectCustomer(c)}
+                      className="w-full text-left px-3 py-2 hover:bg-slate-50"
+                    >
+                      <div className="text-sm font-medium">{c.name}</div>
+                      <div className="text-xs text-gray-500">
+                        {c.phone} {c.address ? `• ${c.address}` : ""}
+                      </div>
+                    </button>
+                  ))}
+              </div>
+            )}
+          </div>
           <input
             placeholder="Phone"
             className="border p-2 rounded"
@@ -204,37 +290,47 @@ export default function Sales() {
       <div className="bg-white rounded-xl border-2 border-[#1A304B] shadow p-5 mb-6">
         <h2 className="font-semibold mb-3">Items</h2>
 
-        {items.map((item, index) => (
-          <div key={index} className="grid md:grid-cols-3 gap-4 mb-3">
-            <select
-              className="border p-2 rounded"
-              value={item.productId}
-              onChange={(e) => updateItem(index, "productId", e.target.value)}
-            >
-              <option value="">Select Product</option>
-              {products.map((p) => (
-                <option key={p._id} value={p._id}>
-                  {p.name} 
-                </option>
-              ))}
-            </select>
+        {items.map((item, index) => {
+          const product = getProductById(item.productId);
+          const stock = product?.stock ?? null;
 
-            <input
-              type="number"
-              min="1"
-              className="border p-2 rounded"
-              value={item.quantity}
-              onChange={(e) => updateItem(index, "quantity", e.target.value)}
-            />
+          return (
+            <div key={index} className="grid md:grid-cols-3 gap-4 mb-3">
+              <select
+                className="border p-2 rounded"
+                value={item.productId}
+                onChange={(e) => updateItem(index, "productId", e.target.value)}
+              >
+                <option value="">Select Product</option>
+                {products.map((p) => (
+                  <option key={p._id} value={p._id}>
+                    {p.name}
+                  </option>
+                ))}
+              </select>
 
-            <button
-              onClick={() => removeItem(index)}
-              className="text-red-600 text-sm"
-            >
-              Remove
-            </button>
-          </div>
-        ))}
+              <input
+                type="number"
+                min="1"
+                className="border p-2 rounded"
+                value={item.quantity}
+                onChange={(e) => updateItem(index, "quantity", e.target.value)}
+              />
+
+              <button
+                onClick={() => removeItem(index)}
+                className="text-red-600 text-sm"
+              >
+                Remove
+              </button>
+              {stock !== null && (
+                <div className="md:col-span-3 text-xs text-gray-500 -mt-2">
+                  Available stock: {stock}
+                </div>
+              )}
+            </div>
+          );
+        })}
 
         <button onClick={addItem} className="text-blue-600 text-sm">
           + Add Item
