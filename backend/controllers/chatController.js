@@ -2,9 +2,28 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const GEMINI_API_KEY = process.env.GEMINI_API_KEY || "";
-const GEMINI_MODEL = process.env.GEMINI_MODEL || "gemini-flash-latest";
-const GEMINI_FALLBACK_MODEL = "gemini-flash-latest";
+const CHAT_PROVIDER = (process.env.CHAT_PROVIDER || "groq").toLowerCase();
+const GROQ_API_KEY = process.env.GROQ_API_KEY || "";
+const GROQ_BASE_URL =
+  process.env.GROQ_BASE_URL || "https://api.groq.com/openai/v1";
+const GROQ_MODEL = process.env.GROQ_MODEL || "llama-3.1-8b-instant";
+const GROQ_TIMEOUT_MS = 20000;
+
+const getMessageText = (responseMessage) => {
+  if (typeof responseMessage?.content === "string") {
+    return responseMessage.content.trim();
+  }
+
+  if (!Array.isArray(responseMessage?.content)) {
+    return "";
+  }
+
+  return responseMessage.content
+    .map((part) => part?.text || "")
+    .filter(Boolean)
+    .join("\n")
+    .trim();
+};
 
 const buildSystemPrompt = ({ shop, user }) => {
   const shopName = shop?.shopName || "the shop";
@@ -41,71 +60,55 @@ export const chatWithAssistant = async (req, res) => {
       user: req.user,
     });
 
-    if (!GEMINI_API_KEY) {
+    if (CHAT_PROVIDER !== "groq") {
       return res.status(400).json({
-        message: "Gemini API key missing",
-        details: "Set GEMINI_API_KEY in backend/.env and restart the server.",
+        message: "Unsupported chat provider",
+        details: "Set CHAT_PROVIDER=groq to use the Groq chat integration.",
       });
     }
 
-    const contents = [
+    if (!GROQ_API_KEY) {
+      return res.status(400).json({
+        message: "Groq API key missing",
+        details: "Set GROQ_API_KEY in backend/.env and restart the server.",
+      });
+    }
+
+    const messages = [
+      { role: "system", content: systemPrompt },
       ...(Array.isArray(history)
         ? history
             .filter((item) => item?.content)
             .map((item) => ({
-              role: item.role === "assistant" ? "model" : "user",
-              parts: [{ text: String(item.content) }],
+              role: item.role === "assistant" ? "assistant" : "user",
+              content: String(item.content),
             }))
         : []),
-      { role: "user", parts: [{ text: message }] },
+      { role: "user", content: message },
     ];
 
-    const payload = {
-      systemInstruction: {
-        role: "system",
-        parts: [{ text: systemPrompt }],
-      },
-      contents,
-      generationConfig: {
-        temperature: 0.2,
-        maxOutputTokens: 768,
-      },
-    };
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), GROQ_TIMEOUT_MS);
 
-    const callGemini = async (modelName) => {
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 20000);
+    let response;
 
-      const response = await fetch(
-        `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${GEMINI_API_KEY}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-          signal: controller.signal,
+    try {
+      response = await fetch(`${GROQ_BASE_URL}/chat/completions`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${GROQ_API_KEY}`,
         },
-      );
-
+        body: JSON.stringify({
+          model: GROQ_MODEL,
+          messages,
+          temperature: 0.2,
+          max_tokens: 768,
+        }),
+        signal: controller.signal,
+      });
+    } finally {
       clearTimeout(timeoutId);
-
-      return response;
-    };
-
-    let response = await callGemini(GEMINI_MODEL);
-
-    if (!response.ok) {
-      const errText = await response.text();
-      const shouldFallback =
-        response.status === 404 && GEMINI_MODEL !== GEMINI_FALLBACK_MODEL;
-
-      if (shouldFallback) {
-        response = await callGemini(GEMINI_FALLBACK_MODEL);
-      } else {
-        return res.status(502).json({
-          message: "Chat service error",
-          details: errText,
-        });
-      }
     }
 
     if (!response.ok) {
@@ -118,12 +121,19 @@ export const chatWithAssistant = async (req, res) => {
 
     const data = await response.json();
     const reply =
-      data?.candidates?.[0]?.content?.parts?.[0]?.text ||
+      getMessageText(data?.choices?.[0]?.message) ||
       "Sorry, I could not answer that.";
 
     res.json({ reply });
   } catch (error) {
+    const isTimeout = error?.name === "AbortError";
+
     console.error("VyapaarChat error:", error);
-    res.status(500).json({ message: "Server error" });
+    res.status(isTimeout ? 504 : 500).json({
+      message: isTimeout ? "Chat service timeout" : "Server error",
+      details: isTimeout
+        ? "The Groq request did not respond in time."
+        : "Unexpected server error.",
+    });
   }
 };
